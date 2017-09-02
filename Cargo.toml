@@ -1,0 +1,9 @@
+[package]
+name = "wasmrs"
+version = "0.1.0"
+authors = ["Joseph Birr-Pixton <jpixton@gmail.com>"]
+
+[dependencies]
+atoms = "2.2.3"
+untrusted = "0.5"
+byteorder = "1"
