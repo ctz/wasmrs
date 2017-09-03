@@ -58,7 +58,7 @@ impl FunctionBody {
         }
 
         let r = Ok(FunctionBody { locals, ops });
-        println!("func {:?}", r);
+        println!("func {:#?}", r);
         r
     }
 }
