@@ -40,26 +40,21 @@ struct FunctionType {
 impl FunctionType {
     pub fn decode(rd: &mut untrusted::Reader) -> Result<FunctionType, CodecError> {
         let form = codec::read_varu7(rd)?;
-        println!("form {:?}", form);
 
         let param_count = codec::read_varu32(rd)?;
-        println!("params {:?}", param_count);
         let mut params = vec![];
         for _ in 0..param_count {
             params.push(ValueType::decode(rd)?);
         }
 
         let return_count = codec::read_varu1(rd)?;
-        println!("return {:?}", return_count);
         let ret = if return_count == 1 {
             Some(ValueType::decode(rd)?)
         } else {
             None
         };
 
-        let r = Ok(FunctionType { params, ret });
-        println!("FunctionType {:?}", r);
-        r
+        Ok(FunctionType { params, ret })
     }
 }
 
@@ -142,16 +137,12 @@ struct ImportEntry<'a> {
 impl<'a> ImportEntry<'a> {
     pub fn decode(rd: &mut untrusted::Reader<'a>) -> Result<ImportEntry<'a>, CodecError> {
         let mod_len = codec::read_varu32(rd)?;
-        println!("import mod {:?}", mod_len);
         let module = codec::read_utf8(rd, mod_len as usize)?;
         let field_len = codec::read_varu32(rd)?;
-        println!("import field {:?}", field_len);
         let field = codec::read_utf8(rd, field_len as usize)?;
         let kind = ImportKind::decode(rd)?;
 
-        let r = Ok(ImportEntry { module, field, kind });
-        println!("import {:?}", r);
-        r
+        Ok(ImportEntry { module, field, kind })
     }
 }
 
@@ -239,7 +230,6 @@ struct DataSegment<'a> {
 
 impl<'a> DataSegment<'a> {
     pub fn decode(rd: &mut untrusted::Reader<'a>) -> Result<DataSegment<'a>, CodecError> {
-        println!("DataSegment");
         let index = codec::read_varu32(rd)?;
         let init = InitExpr::decode(rd)?;
 
@@ -288,8 +278,6 @@ impl<'a> Section<'a> {
         let payload = rd.skip_and_get_input(len as usize)
             .map_err(|_| CodecError::Truncated)?;
         let mut prd = untrusted::Reader::new(payload);
-
-        println!("sec {}", id);
 
         let section = match id {
             SECTIONID_CUSTOM => {
@@ -369,11 +357,9 @@ impl<'a> Section<'a> {
             }
             SECTIONID_CODE => {
                 let count = codec::read_varu32(&mut prd)?;
-                println!("funcs {:?}", count);
                 let mut funcs = vec![];
                 for _  in 0..count {
                     funcs.push(FunctionBody::decode(&mut prd)?);
-                    println!("func {:?}", funcs.len());
                 }
                 Ok(Section::Code(funcs))
             }
@@ -390,7 +376,6 @@ impl<'a> Section<'a> {
                 Err(CodecError::Unimpl)
             }
         };
-        println!("section {:?}", section);
         section
     }
 }

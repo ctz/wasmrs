@@ -13,3 +13,12 @@ pub enum CodecError {
     BadFunctionEnd,
     BadOpArgs,
 }
+
+#[derive(Debug, PartialEq)]
+pub enum RuntimeError {
+    MemoryFault,
+    TypeFault,
+    StackUnderflow,
+    DivideByZero,
+    Unimpl
+}

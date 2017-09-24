@@ -14,7 +14,6 @@ struct Local {
 impl Local {
     pub fn decode(rd: &mut untrusted::Reader) -> Result<Local, CodecError> {
         let count = codec::read_varu32(rd)?;
-        println!("local count {:?}", count);
         let ty = ValueType::decode(rd)?;
         Ok(Local { count, ty })
     }
@@ -28,7 +27,6 @@ pub struct FunctionBody {
 
 impl FunctionBody {
     pub fn decode(rd: &mut untrusted::Reader) -> Result<FunctionBody, CodecError> {
-        println!("functionbody");
         let body_size = codec::read_varu32(rd)?;
 
         let mut body = rd.skip_and_get_input(body_size as usize)
@@ -37,7 +35,6 @@ impl FunctionBody {
 
         let mut locals = vec![];
         let local_count = codec::read_varu32(&mut body)?;
-        println!("locals {:?}", local_count);
 
         for _ in 0..local_count {
             locals.push(Local::decode(&mut body)?);
@@ -57,8 +54,6 @@ impl FunctionBody {
             ops.push(op);
         }
 
-        let r = Ok(FunctionBody { locals, ops });
-        println!("func {:#?}", r);
-        r
+        Ok(FunctionBody { locals, ops })
     }
 }

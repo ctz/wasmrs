@@ -5,8 +5,8 @@ use codec;
 
 #[derive(Debug)]
 pub struct MemoryImmed {
-    align: u8,
-    offset: u32
+    pub align: u8,
+    pub offset: u32
 }
 
 impl MemoryImmed {

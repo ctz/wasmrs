@@ -7,6 +7,9 @@ mod expr;
 mod function;
 mod section;
 mod ty;
+mod mem;
+mod value;
+mod exec;
 
 #[cfg(test)]
 mod tests {

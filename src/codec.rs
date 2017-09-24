@@ -31,7 +31,6 @@ pub fn read_varu(rd: &mut untrusted::Reader, mut len: usize) -> Result<u64, Code
         len -= 1;
 
         let topbit = b >> 7;
-        println!("byte {:02x} top {} len {}", b, topbit, len);
 
         match (topbit, len) {
             (1, 0) => return Err(CodecError::BadVarInt),
